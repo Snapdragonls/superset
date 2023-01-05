@@ -81,6 +81,7 @@ describe('ChartHolder', () => {
     nativeFilters: nativeFiltersInfo.filters,
     fullSizeChartId: chartId,
     setFullSizeChartId: () => {},
+    chart: {},
   };
 
   beforeAll(() => {

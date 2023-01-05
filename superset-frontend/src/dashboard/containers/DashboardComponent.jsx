@@ -81,7 +81,7 @@ function mapStateToProps(
     filters: getActiveFilters(),
     dashboardId: dashboardInfo.id,
     fullSizeChartId: dashboardState.fullSizeChartId,
-    chart: chart,
+    chart,
   };
 
   // rows and columns need more data about their child dimensions

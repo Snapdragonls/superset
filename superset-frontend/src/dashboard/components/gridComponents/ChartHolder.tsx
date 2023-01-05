@@ -234,7 +234,7 @@ const ChartHolder: React.FC<ChartHolderProps> = ({
       [name]: value,
     }));
   }, []);
-  
+
   const isEmpty = () => {
     if (chart.chartStatus !== 'loading') {
       return (
@@ -259,80 +259,80 @@ const ChartHolder: React.FC<ChartHolderProps> = ({
     >
       {({ dropIndicatorProps, dragSourceRef }) =>
         !isEmpty() && (
-        <ResizableContainer
-          id={component.id}
-          adjustableWidth={parentComponent.type === ROW_TYPE}
-          adjustableHeight
-          widthStep={columnWidth}
-          widthMultiple={widthMultiple}
-          heightStep={GRID_BASE_UNIT}
-          heightMultiple={component.meta.height}
-          minWidthMultiple={GRID_MIN_COLUMN_COUNT}
-          minHeightMultiple={GRID_MIN_ROW_UNITS}
-          maxWidthMultiple={availableColumnCount + widthMultiple}
-          onResizeStart={onResizeStart}
-          onResize={onResize}
-          onResizeStop={onResizeStop}
-          editMode={editMode}
-        >
-          <div
-            ref={dragSourceRef}
-            data-test="dashboard-component-chart-holder"
-            style={focusHighlightStyles}
-            className={cx(
-              'dashboard-component',
-              'dashboard-component-chart-holder',
-              // The following class is added to support custom dashboard styling via the CSS editor
-              `dashboard-chart-id-${chartId}`,
-              outlinedComponentId ? 'fade-in' : 'fade-out',
-              isFullSize && 'full-size',
-            )}
+          <ResizableContainer
+            id={component.id}
+            adjustableWidth={parentComponent.type === ROW_TYPE}
+            adjustableHeight
+            widthStep={columnWidth}
+            widthMultiple={widthMultiple}
+            heightStep={GRID_BASE_UNIT}
+            heightMultiple={component.meta.height}
+            minWidthMultiple={GRID_MIN_COLUMN_COUNT}
+            minHeightMultiple={GRID_MIN_ROW_UNITS}
+            maxWidthMultiple={availableColumnCount + widthMultiple}
+            onResizeStart={onResizeStart}
+            onResize={onResize}
+            onResizeStop={onResizeStop}
+            editMode={editMode}
           >
-            {!editMode && (
-              <AnchorLink
-                id={component.id}
-                scrollIntoView={outlinedComponentId === component.id}
-              />
-            )}
-            {!!outlinedComponentId && (
-              <style>
-                {`label[for=${outlinedColumnName}] + .Select .Select__control {
+            <div
+              ref={dragSourceRef}
+              data-test="dashboard-component-chart-holder"
+              style={focusHighlightStyles}
+              className={cx(
+                'dashboard-component',
+                'dashboard-component-chart-holder',
+                // The following class is added to support custom dashboard styling via the CSS editor
+                `dashboard-chart-id-${chartId}`,
+                outlinedComponentId ? 'fade-in' : 'fade-out',
+                isFullSize && 'full-size',
+              )}
+            >
+              {!editMode && (
+                <AnchorLink
+                  id={component.id}
+                  scrollIntoView={outlinedComponentId === component.id}
+                />
+              )}
+              {!!outlinedComponentId && (
+                <style>
+                  {`label[for=${outlinedColumnName}] + .Select .Select__control {
                     border-color: #00736a;
                     transition: border-color 1s ease-in-out;
                   }`}
-              </style>
-            )}
-            <Chart
-              componentId={component.id}
-              id={component.meta.chartId}
-              dashboardId={dashboardId}
-              width={chartWidth}
-              height={chartHeight}
-              sliceName={
-                component.meta.sliceNameOverride ||
-                component.meta.sliceName ||
-                ''
-              }
-              updateSliceName={handleUpdateSliceName}
-              isComponentVisible={isComponentVisible}
-              handleToggleFullSize={handleToggleFullSize}
-              isFullSize={isFullSize}
-              setControlValue={handleExtraControl}
-              extraControls={extraControls}
-              isInView={isInView}
-            />
-            {editMode && (
-              <HoverMenu position="top">
-                <div data-test="dashboard-delete-component-button">
-                  <DeleteComponentButton onDelete={handleDeleteComponent} />
-                </div>
-              </HoverMenu>
-            )}
-          </div>
-          {dropIndicatorProps && <div {...dropIndicatorProps} />}
-        </ResizableContainer>
-      )
-     }
+                </style>
+              )}
+              <Chart
+                componentId={component.id}
+                id={component.meta.chartId}
+                dashboardId={dashboardId}
+                width={chartWidth}
+                height={chartHeight}
+                sliceName={
+                  component.meta.sliceNameOverride ||
+                  component.meta.sliceName ||
+                  ''
+                }
+                updateSliceName={handleUpdateSliceName}
+                isComponentVisible={isComponentVisible}
+                handleToggleFullSize={handleToggleFullSize}
+                isFullSize={isFullSize}
+                setControlValue={handleExtraControl}
+                extraControls={extraControls}
+                isInView={isInView}
+              />
+              {editMode && (
+                <HoverMenu position="top">
+                  <div data-test="dashboard-delete-component-button">
+                    <DeleteComponentButton onDelete={handleDeleteComponent} />
+                  </div>
+                </HoverMenu>
+              )}
+            </div>
+            {dropIndicatorProps && <div {...dropIndicatorProps} />}
+          </ResizableContainer>
+        )
+      }
     </DragDroppable>
   );
 };
