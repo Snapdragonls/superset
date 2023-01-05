@@ -65,12 +65,14 @@ const defaultProps = {
 };
 
 function mapStateToProps(
-  { dashboardLayout: undoableLayout, dashboardState, dashboardInfo },
+  { dashboardLayout: undoableLayout, dashboardState, dashboardInfo, charts },
   ownProps,
 ) {
   const dashboardLayout = undoableLayout.present;
   const { id, parentId } = ownProps;
   const component = dashboardLayout[id];
+  const { chartId } = component.meta;
+  const chart = charts[chartId];
   const props = {
     component,
     getComponentById: id => dashboardLayout[id],
@@ -79,6 +81,7 @@ function mapStateToProps(
     filters: getActiveFilters(),
     dashboardId: dashboardInfo.id,
     fullSizeChartId: dashboardState.fullSizeChartId,
+    chart: chart,
   };
 
   // rows and columns need more data about their child dimensions
