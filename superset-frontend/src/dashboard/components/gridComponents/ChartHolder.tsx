@@ -67,6 +67,7 @@ interface ChartHolderProps {
   handleComponentDrop: (...args: unknown[]) => unknown;
   setFullSizeChartId: (chartId: number | null) => void;
   isInView: boolean;
+  chart: any;
 }
 
 const ChartHolder: React.FC<ChartHolderProps> = ({
@@ -91,6 +92,7 @@ const ChartHolder: React.FC<ChartHolderProps> = ({
   handleComponentDrop,
   setFullSizeChartId,
   isInView,
+  chart,
 }) => {
   const { chartId } = component.meta;
   const isFullSize = fullSizeChartId === chartId;
@@ -232,6 +234,17 @@ const ChartHolder: React.FC<ChartHolderProps> = ({
       [name]: value,
     }));
   }, []);
+  
+  const isEmpty = () => {
+    if (chart.chartStatus !== 'loading') {
+      return (
+        !chart.queriesResponse ||
+        !chart.queriesResponse[0].data ||
+        !chart.queriesResponse[0].data.length
+      );
+    }
+    return false;
+  };
 
   return (
     <DragDroppable
@@ -244,7 +257,8 @@ const ChartHolder: React.FC<ChartHolderProps> = ({
       disableDragDrop={false}
       editMode={editMode}
     >
-      {({ dropIndicatorProps, dragSourceRef }) => (
+      {({ dropIndicatorProps, dragSourceRef }) =>
+        !isEmpty() && (
         <ResizableContainer
           id={component.id}
           adjustableWidth={parentComponent.type === ROW_TYPE}
@@ -317,7 +331,8 @@ const ChartHolder: React.FC<ChartHolderProps> = ({
           </div>
           {dropIndicatorProps && <div {...dropIndicatorProps} />}
         </ResizableContainer>
-      )}
+      )
+     }
     </DragDroppable>
   );
 };
