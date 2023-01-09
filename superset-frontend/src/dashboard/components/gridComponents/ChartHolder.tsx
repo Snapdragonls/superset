@@ -236,7 +236,11 @@ const ChartHolder: React.FC<ChartHolderProps> = ({
   }, []);
 
   const isEmpty = () => {
-    if (chart.chartStatus !== 'loading') {
+    if (
+      chart.chartStatus !== 'loading' &&
+      chart.form_data.viz_type !== 'filter_box' &&
+      !editMode
+    ) {
       return (
         !chart.queriesResponse ||
         !chart.queriesResponse[0].data ||
