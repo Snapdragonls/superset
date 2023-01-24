@@ -354,15 +354,13 @@ export class TableRenderer extends React.Component {
       dateFormatters,
     } = this.props.tableOptions;
 
+    const spacecells = [];
     const spaceCell =
-      attrIdx === 0 && rowAttrs.length !== 0 ? (
-        <th
-          key="padding"
-          colSpan={rowAttrs.length}
-          rowSpan={colAttrs.length}
-          aria-hidden="true"
-        />
-      ) : null;
+      rowAttrs.length !== 0
+        ? rowAttrs.forEach(row => {
+            spacecells.push(<th class="empty-cells" colSpan={1} rowSpan={1} />);
+          })
+        : null;
 
     const needToggle =
       colSubtotalDisplay.enabled && attrIdx !== colAttrs.length - 1;
@@ -375,17 +373,20 @@ export class TableRenderer extends React.Component {
           : this.expandAttr(false, attrIdx, colKeys);
       subArrow = attrIdx + 1 < maxColVisible ? arrowExpanded : arrowCollapsed;
     }
-    const attrNameCell = (
-      <th key="label" className="pvtAxisLabel">
-        {displayHeaderCell(
-          needToggle,
-          subArrow,
-          arrowClickHandle,
-          attrName,
-          namesMapping,
-        )}
-      </th>
-    );
+    const attrNameCell =
+      attrIdx < colAttrs.length - 1 ? (
+        <th key="label" className="pvtAxisLabel pivot-point">
+          {displayHeaderCell(
+            needToggle,
+            subArrow,
+            arrowClickHandle,
+            attrName,
+            namesMapping,
+          )}
+        </th>
+      ) : (
+        <th class="empty-cells"></th>
+      );
 
     const attrValueCells = [];
     const rowIncrSpan = rowAttrs.length !== 0 ? 1 : 0;
@@ -490,7 +491,7 @@ export class TableRenderer extends React.Component {
         </th>
       ) : null;
 
-    const cells = [spaceCell, attrNameCell, ...attrValueCells, totalCell];
+    const cells = [spacecells, attrNameCell, ...attrValueCells, totalCell];
     return <tr key={`colAttr-${attrIdx}`}>{cells}</tr>;
   }
 
@@ -535,6 +536,15 @@ export class TableRenderer extends React.Component {
             </th>
           );
         })}
+        <th key="label" className="pvtAxisLabel pivot-point">
+          {displayHeaderCell(
+            false,
+            null,
+            null,
+            colAttrs[colAttrs.length - 1],
+            namesMapping,
+          )}
+        </th>
         <th
           className="pvtTotalLabel"
           key="padding"

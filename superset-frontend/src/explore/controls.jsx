@@ -249,21 +249,9 @@ export const controls = {
     type: 'SelectControl',
     freeForm: true,
     label: TIME_FILTER_LABELS.granularity,
-    default: 'P1D',
+    default: '',
     choices: [
       [null, 'all'],
-      ['PT5S', '5 seconds'],
-      ['PT30S', '30 seconds'],
-      ['PT1M', '1 minute'],
-      ['PT5M', '5 minutes'],
-      ['PT30M', '30 minutes'],
-      ['PT1H', '1 hour'],
-      ['PT6H', '6 hour'],
-      ['P1D', '1 day'],
-      ['P7D', '7 days'],
-      ['P1W', 'week'],
-      ['week_starting_sunday', 'week starting Sunday'],
-      ['week_ending_saturday', 'week ending Saturday'],
       ['P1M', 'month'],
       ['P3M', 'quarter'],
       ['P1Y', 'year'],
@@ -306,7 +294,7 @@ export const controls = {
   time_grain_sqla: {
     type: 'SelectControl',
     label: TIME_FILTER_LABELS.time_grain_sqla,
-    default: 'P1D',
+    default: 'P3M',
     description: t(
       'The time granularity for the visualization. This ' +
         'applies a date transformation to alter ' +
@@ -315,7 +303,10 @@ export const controls = {
         'engine basis in the Superset source code.',
     ),
     mapStateToProps: state => ({
-      choices: state.datasource ? state.datasource.time_grain_sqla : null,
+      choices: [
+        ['P3M', 'quarter'],
+        ['P1Y', 'year'],
+      ],
     }),
   },
 
