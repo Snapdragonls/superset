@@ -355,12 +355,11 @@ export class TableRenderer extends React.Component {
     } = this.props.tableOptions;
 
     const spacecells = [];
-    const spaceCell =
-      rowAttrs.length !== 0
-        ? rowAttrs.forEach(row => {
-            spacecells.push(<th class="empty-cells" colSpan={1} rowSpan={1} />);
-          })
-        : null;
+    rowAttrs.length !== 0
+      ? rowAttrs.forEach(row => {
+          spacecells.push(<th class="empty-cells" colSpan={1} rowSpan={1} />);
+        })
+      : '';
 
     const needToggle =
       colSubtotalDisplay.enabled && attrIdx !== colAttrs.length - 1;
