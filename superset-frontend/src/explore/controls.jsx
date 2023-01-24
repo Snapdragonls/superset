@@ -302,7 +302,7 @@ export const controls = {
         'The options here are defined on a per database ' +
         'engine basis in the Superset source code.',
     ),
-    mapStateToProps: state => ({
+    mapStateToProps: () => ({
       choices: [
         ['P3M', 'quarter'],
         ['P1Y', 'year'],

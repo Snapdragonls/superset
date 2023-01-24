@@ -357,7 +357,9 @@ export class TableRenderer extends React.Component {
     const spacecells = [];
     rowAttrs.length !== 0
       ? rowAttrs.forEach(row => {
-          spacecells.push(<th class="empty-cells" colSpan={1} rowSpan={1} />);
+          spacecells.push(
+            <th className="empty-cells" colSpan={1} rowSpan={1} />,
+          );
         })
       : '';
 
@@ -384,7 +386,7 @@ export class TableRenderer extends React.Component {
           )}
         </th>
       ) : (
-        <th class="empty-cells"></th>
+        <th className="empty-cells"></th>
       );
 
     const attrValueCells = [];
