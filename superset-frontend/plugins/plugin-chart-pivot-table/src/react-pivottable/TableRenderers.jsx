@@ -355,13 +355,19 @@ export class TableRenderer extends React.Component {
     } = this.props.tableOptions;
 
     const spacecells = [];
-    rowAttrs.length !== 0
-      ? rowAttrs.forEach(row => {
-          spacecells.push(
-            <th className="empty-cells" colSpan={1} rowSpan={1} />,
-          );
-        })
-      : '';
+    if (rowAttrs.length !== 0) {
+      rowAttrs.forEach((row, index) => {
+        spacecells.push(
+          <th
+            aria-hidden="true"
+            key={row + index}
+            className="empty-cells"
+            colSpan={1}
+            rowSpan={1}
+          />,
+        );
+      });
+    }
 
     const needToggle =
       colSubtotalDisplay.enabled && attrIdx !== colAttrs.length - 1;
@@ -386,7 +392,7 @@ export class TableRenderer extends React.Component {
           )}
         </th>
       ) : (
-        <th className="empty-cells"></th>
+        <th aria-hidden="true" className="empty-cells" />
       );
 
     const attrValueCells = [];
