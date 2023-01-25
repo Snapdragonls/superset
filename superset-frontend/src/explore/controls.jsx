@@ -75,8 +75,8 @@ export const PRIMARY_COLOR = { r: 0, g: 122, b: 135, a: 1 };
 
 // input choices & options
 export const D3_FORMAT_OPTIONS = [
-  ['SMART_NUMBER', 'Adaptive formatting'],
-  ['~g', 'Original value'],
+  ['SMART_NUMBER', t('Adaptive formatting')],
+  ['~g', t('Original value')],
   [',d', ',d (12345.432 => 12,345)'],
   ['.1s', '.1s (12345.432 => 10k)'],
   ['.3s', '.3s (12345.432 => 12.3k)'],
@@ -86,8 +86,8 @@ export const D3_FORMAT_OPTIONS = [
   [',.3f', ',.3f (12345.432 => 12,345.432)'],
   ['+,', '+, (12345.432 => +12,345.432)'],
   ['$,.2f', '$,.2f (12345.432 => $12,345.43)'],
-  ['DURATION', 'Duration in ms (66000 => 1m 6s)'],
-  ['DURATION_SUB', 'Duration in ms (100.40008 => 100ms 400µs 80ns)'],
+  ['DURATION', t('Duration in ms (66000 => 1m 6s)')],
+  ['DURATION_SUB', t('Duration in ms (100.40008 => 100ms 400µs 80ns)')],
 ];
 
 const ROW_LIMIT_OPTIONS = [10, 50, 100, 250, 500, 1000, 5000, 10000, 50000];
@@ -98,7 +98,7 @@ export const D3_FORMAT_DOCS =
   'D3 format syntax: https://github.com/d3/d3-format';
 
 export const D3_TIME_FORMAT_OPTIONS = [
-  ['smart_date', 'Adaptive formatting'],
+  ['smart_date', t('Adaptive formatting')],
   ['%d/%m/%Y', '%d/%m/%Y | 14/01/2019'],
   ['%m/%d/%Y', '%m/%d/%Y | 01/14/2019'],
   ['%Y-%m-%d', '%Y-%m-%d | 2019-01-14'],
