@@ -304,8 +304,8 @@ export const controls = {
     ),
     mapStateToProps: () => ({
       choices: [
-        ['P3M', 'quarter'],
-        ['P1Y', 'year'],
+        ['P3M', 'Quarter'],
+        ['P1Y', 'Year'],
       ],
     }),
   },
