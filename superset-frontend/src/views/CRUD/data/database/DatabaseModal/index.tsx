@@ -63,6 +63,7 @@ import {
   ExtraJson,
 } from 'src/views/CRUD/data/database/types';
 import Loading from 'src/components/Loading';
+import { pick } from 'lodash';
 import ExtraOptions from './ExtraOptions';
 import SqlAlchemyForm from './SqlAlchemyForm';
 import DatabaseConnectionForm from './DatabaseConnectionForm';
@@ -136,6 +137,7 @@ interface DatabaseModalProps {
   show: boolean;
   databaseId: number | undefined; // If included, will go into edit mode
   dbEngine: string | undefined; // if included goto step 2 with engine already set
+  history?: any;
 }
 
 export enum ActionType {
@@ -372,29 +374,41 @@ export function dbReducer(
           [action.payload.name]: action.payload.value,
         },
       };
-    case ActionType.setSSHTunnelLoginMethod:
+    case ActionType.setSSHTunnelLoginMethod: {
+      let ssh_tunnel = {};
+      if (trimmedState?.ssh_tunnel) {
+        // remove any attributes that are considered sensitive
+        ssh_tunnel = pick(trimmedState.ssh_tunnel, [
+          'id',
+          'server_address',
+          'server_port',
+          'username',
+        ]);
+      }
       if (action.payload.login_method === AuthType.privateKey) {
-        const { password, ...rest } = trimmedState?.ssh_tunnel ?? {};
         return {
           ...trimmedState,
           ssh_tunnel: {
-            ...rest,
+            private_key: trimmedState?.ssh_tunnel?.private_key,
+            private_key_password:
+              trimmedState?.ssh_tunnel?.private_key_password,
+            ...ssh_tunnel,
           },
         };
       }
       if (action.payload.login_method === AuthType.password) {
-        const { private_key, private_key_password, ...rest } =
-          trimmedState?.ssh_tunnel ?? {};
         return {
           ...trimmedState,
           ssh_tunnel: {
-            ...rest,
+            password: trimmedState?.ssh_tunnel?.password,
+            ...ssh_tunnel,
           },
         };
       }
       return {
         ...trimmedState,
       };
+    }
     case ActionType.removeSSHTunnelConfig:
       return {
         ...trimmedState,
@@ -508,6 +522,7 @@ const DatabaseModal: FunctionComponent<DatabaseModalProps> = ({
   show,
   databaseId,
   dbEngine,
+  history,
 }) => {
   const [db, setDB] = useReducer<
     Reducer<Partial<DatabaseObject> | null, DBReducerActionType>
@@ -640,6 +655,16 @@ const DatabaseModal: FunctionComponent<DatabaseModalProps> = ({
     onHide();
   };
 
+  const redirectURL = (url: string) => {
+    /* TODO (lyndsiWilliams): This check and passing history
+      as a prop can be removed once SQL Lab is in the SPA */
+    if (!isEmpty(history)) {
+      history?.push(url);
+    } else {
+      window.location.href = url;
+    }
+  };
+
   // Database import logic
   const {
     state: {
@@ -728,7 +753,7 @@ const DatabaseModal: FunctionComponent<DatabaseModalProps> = ({
     }
 
     if (dbToUpdate?.parameters?.catalog) {
-      // need to stringify gsheets catalog to allow it to be seralized
+      // need to stringify gsheets catalog to allow it to be serialized
       dbToUpdate.extra = JSON.stringify({
         ...JSON.parse(dbToUpdate.extra || '{}'),
         engine_params: {
@@ -1216,7 +1241,7 @@ const DatabaseModal: FunctionComponent<DatabaseModalProps> = ({
           required
           validationMethods={{ onBlur: () => {} }}
           errorMessage={validationErrors?.confirm_overwrite}
-          label={t(`TYPE "OVERWRITE" TO CONFIRM`)}
+          label={t('Type "%s" to confirm', t('OVERWRITE'))}
           onChange={confirmOverwrite}
           css={formScrollableStyles}
         />
@@ -1332,23 +1357,21 @@ const DatabaseModal: FunctionComponent<DatabaseModalProps> = ({
   const renderCTABtns = () => (
     <StyledBtns>
       <Button
-        // eslint-disable-next-line no-return-assign
         buttonStyle="secondary"
         onClick={() => {
           setLoading(true);
           fetchAndSetDB();
-          window.location.href = '/tablemodelview/list#create';
+          redirectURL('/dataset/add/');
         }}
       >
         {t('CREATE DATASET')}
       </Button>
       <Button
         buttonStyle="secondary"
-        // eslint-disable-next-line no-return-assign
         onClick={() => {
           setLoading(true);
           fetchAndSetDB();
-          window.location.href = `/superset/sqllab/?db=true`;
+          redirectURL(`/superset/sqllab/?db=true`);
         }}
       >
         {t('QUERY DATA IN SQL LAB')}
@@ -1615,7 +1638,7 @@ const DatabaseModal: FunctionComponent<DatabaseModalProps> = ({
               <Alert
                 closable={false}
                 css={(theme: SupersetTheme) => antDAlertStyles(theme)}
-                message="Additional fields may be required"
+                message={t('Additional fields may be required')}
                 showIcon
                 description={
                   <>
