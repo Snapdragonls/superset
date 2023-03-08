@@ -401,6 +401,7 @@ export class TableRenderer extends React.Component {
     // Iterate through columns. Jump over duplicate values.
     let i = 0;
     while (i < visibleColKeys.length) {
+      let handleContextMenu;
       const colKey = visibleColKeys[i];
       const colSpan = attrIdx < colKey.length ? colAttrSpans[i][attrIdx] : 1;
       let colLabelClass = 'pvtColLabel';
@@ -410,6 +411,10 @@ export class TableRenderer extends React.Component {
           !omittedHighlightHeaderGroups.includes(colAttrs[attrIdx])
         ) {
           colLabelClass += ' hoverable';
+          handleContextMenu = e =>
+            this.props.onContextMenu(e, colKey, undefined, {
+              [attrName]: colKey[attrIdx],
+            });
         }
         if (
           highlightedHeaderCells &&
@@ -442,6 +447,7 @@ export class TableRenderer extends React.Component {
               attrIdx,
               this.props.tableOptions.clickColumnHeaderCallback,
             )}
+            onContextMenu={handleContextMenu}
           >
             {displayHeaderCell(
               needToggle,
@@ -607,12 +613,17 @@ export class TableRenderer extends React.Component {
 
     const colIncrSpan = colAttrs.length !== 0 ? 1 : 0;
     const attrValueCells = rowKey.map((r, i) => {
+      let handleContextMenu;
       let valueCellClassName = 'pvtRowLabel';
       if (
         highlightHeaderCellsOnHover &&
         !omittedHighlightHeaderGroups.includes(rowAttrs[i])
       ) {
         valueCellClassName += ' hoverable';
+        handleContextMenu = e =>
+          this.props.onContextMenu(e, undefined, rowKey, {
+            [rowAttrs[i]]: r,
+          });
       }
       if (
         highlightedHeaderCells &&
@@ -648,6 +659,7 @@ export class TableRenderer extends React.Component {
               i,
               this.props.tableOptions.clickRowHeaderCallback,
             )}
+            onContextMenu={handleContextMenu}
           >
             {displayHeaderCell(
               needRowToggle,
